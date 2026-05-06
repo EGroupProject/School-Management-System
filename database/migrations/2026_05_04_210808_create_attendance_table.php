@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->boolean('present');
-            $table->timestamps();
-        });
+       Schema::create('attendance', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('student_id')->constrained()->onDelete('cascade');
+    $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
+    $table->enum('status', ['present', 'absent']);
+    $table->date('date');
+    $table->timestamps();
+    });
     }
 
     /**
