@@ -7,58 +7,78 @@ use Illuminate\Http\Request;
 class SubjectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all subjects
      */
     public function index()
     {
-        //
+        $subjects = Subject::with('teacher.user')->get();
+        return view('admin.subjects.index', compact('subjects'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show create form
      */
     public function create()
     {
-        //
+        $teachers = Teacher::with('user')->get();
+        return view('admin.subjects.create', compact('teachers'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store new subject
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:subjects,name',
+            'teacher_id' => 'required|exists:teachers,id',
+        ]);
+
+        Subject::create([
+            'name' => $request->name,
+            'teacher_id' => $request->teacher_id,
+        ]);
+
+        return redirect()->route('subjects.index')
+            ->with('success', 'Subject created successfully');
     }
 
     /**
-     * Display the specified resource.
+     * Show edit form
      */
-    public function show(string $id)
+    public function edit(Subject $subject)
     {
-        //
+        $teachers = Teacher::with('user')->get();
+        return view('admin.subjects.edit', compact('subject', 'teachers'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update subject
      */
-    public function edit(string $id)
+    public function update(Request $request, Subject $subject)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:subjects,name,' . $subject->id,
+            'teacher_id' => 'required|exists:teachers,id',
+        ]);
+
+        $subject->update([
+            'name' => $request->name,
+            'teacher_id' => $request->teacher_id,
+        ]);
+
+        return redirect()->route('subjects.index')
+            ->with('success', 'Subject updated successfully');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Delete subject
      */
-    public function update(Request $request, string $id)
+    public function destroy(Subject $subject)
     {
-        //
-    }
+        $subject->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('subjects.index')
+            ->with('success', 'Subject deleted successfully');
     }
 }
