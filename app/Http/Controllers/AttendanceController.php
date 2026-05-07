@@ -7,8 +7,21 @@ use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
+    public function index()
+    {
+        return Attendance::with(['student', 'schedule.subject', 'schedule.group'])
+            ->get();
+    }
+
     public function store(Request $request)
     {
+        $teacherId = auth()->user()->teacher->id;
+        $schedule = Schedule::findOrFail($request->schedule_id);
+
+        if ($schedule->subject->teacher_id !== $teacherId) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'student_id' => 'required|exists:students,id',
             'schedule_id' => 'required|exists:schedules,id',

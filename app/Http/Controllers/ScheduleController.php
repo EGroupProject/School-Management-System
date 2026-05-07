@@ -56,8 +56,10 @@ class ScheduleController extends Controller
 
     public function byTeacher($id)
     {
-        return Schedule::with(['group','subject','teacher'])
-            ->where('teacher_id', $id)
+        return Schedule::with(['group','subject'])
+            ->whereHas('subject', function ($q) use ($id) {
+                $q->where('teacher_id', $id);
+            })
             ->get();
     }
 }
