@@ -17,10 +17,7 @@ public function up(): void
         $table->foreignId('group_id')->constrained()->onDelete('cascade');
         $table->foreignId('subject_id')->constrained()->onDelete('cascade');
         $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
-
-        $table->enum('day_of_week', [
-            'monday','tuesday','wednesday','thursday','friday','saturday','sunday'
-        ]);
+        $table->date('date');
 
         $table->time('start_time');
         $table->time('end_time');

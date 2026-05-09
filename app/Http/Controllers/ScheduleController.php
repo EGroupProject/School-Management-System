@@ -18,7 +18,7 @@ class ScheduleController extends Controller
             'group_id' => 'required|exists:groups,id',
             'subject_id' => 'required|exists:subjects,id',
             'teacher_id' => 'required|exists:teachers,id',
-            'day_of_week' => 'required',
+            'date' => 'required|date',
             'start_time' => 'required',
             'end_time' => 'required',
         ]);
@@ -30,13 +30,13 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::findOrFail($id);
 
-        $schedule->update($request->only([
-            'group_id',
-            'subject_id',
-            'teacher_id',
-            'day_of_week',
-            'start_time',
-            'end_time'
+        $schedule->update($request->validate([
+            'group_id' => 'sometimes|exists:groups,id',
+            'subject_id' => 'sometimes|exists:subjects,id',
+            'teacher_id' => 'sometimes|exists:teachers,id',
+            'date' => 'sometimes|date',
+            'start_time' => 'sometimes',
+            'end_time' => 'sometimes',
         ]));
 
         return $schedule;

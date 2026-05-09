@@ -10,10 +10,11 @@ class Schedule extends Model
         'group_id',
         'subject_id',
         'teacher_id',
-        'day_of_week',
+        'date',
         'start_time',
         'end_time'
     ];
+
 
     public function group()
     {

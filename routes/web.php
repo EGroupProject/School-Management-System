@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    //B
+    
    Route::middleware('role:admin')->group(function () {
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::post('/schedules', [ScheduleController::class, 'store']);
@@ -48,15 +48,18 @@ Route::middleware('auth')->group(function () {
     });
     
     Route::middleware('role:student')->group(function () {
-    Route::get('/student/profile', [StudentController::class, 'profile']);
-    Route::get('/student/schedule', [StudentController::class, 'schedule']);
-    Route::get('/student/attendance', [StudentController::class, 'attendance']);
+    Route::get('/student/me', [StudentController::class, 'profile']);
+    Route::get('/student/me/schedule', [StudentController::class, 'schedule']);
+    Route::get('/student/me/attendance', [StudentController::class, 'attendance']);
     });
-
     Route::get('/attendance/student/{id}', [AttendanceController::class, 'byStudent']);
     Route::get('/attendance/group/{id}', [AttendanceController::class, 'byGroup']);
     Route::get('/attendance', [AttendanceController::class, 'index'])->middleware('role:admin');
-    //B
+    
+    Route::get('/test', function () {
+    return view('test');
+    });
+    
     
 });
 
